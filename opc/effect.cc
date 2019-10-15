@@ -3,7 +3,8 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-
+#include <stdlib.h> 
+#include <time.h>       /* time */
 Effect::Effect(buffer_pixel_t *pixels, int num_pixels)
     : pixels_(pixels), num_pixels_(num_pixels) {}
 
@@ -87,6 +88,80 @@ WalkEffect::WalkEffect(buffer_pixel_t *pixels, int num_pixels, int offset)
 void WalkEffect::RenderFrame() {
   memset(pixels_, 0, num_pixels_ * sizeof(buffer_pixel_t));
   *(uint32_t *)&pixels_[position_] = 0xffffffff;
+  position_ += 77 + offset_;
+  position_ %= num_pixels_;
+}
+
+SpikeEffect::SpikeEffect(buffer_pixel_t *pixels, int num_pixels, int offset)
+    : Effect(pixels, num_pixels), offset_(offset), position_(offset) {
+srand (time(NULL));
+ memset(pixels_, 0, num_pixels_ * sizeof(buffer_pixel_t));
+}
+
+void SpikeEffect::RenderFrame() {
+  
+  
+  int arr[8] = {-1,0,1,-1,1,-1,0,1};
+  int carr[8] = {1,1,1,0,0,-1,-1,-1};
+  int maj = 14;
+  int minor = 2;
+  uint8_t whiteness = 0xff;
+  // if((frame_id+1)%3 == 0)
+    {
+  for(int i=0;i<15;++i)
+  for(int j=0;j<15;++j)
+    {
+      int summ = maj;
+      int poi = i*15 + j;
+      uint32_t r = maj*pixels_[poi].r;
+      uint32_t g = maj*pixels_[poi].g;
+      uint32_t b = maj*pixels_[poi].b;
+      //uint32_t w = maj*pixels_[poi].w;
+      if(r==0&&g==0&&b==0)
+	{
+	  summ = 0;
+	}
+      for(int k=0;k<8;++k)
+	{
+	  int id = poi+arr[k]+15*carr[k];
+	  if ( id > 0 && id < num_pixels_ && i + carr[k] >= 0 && i + carr[k] < 15 && j + arr[k] >= 0 && j + arr[k] < 15 && pixels_[id].w != 0 )
+	    {
+	      r+=minor*pixels_[id].r;
+	      //w+=minor*pixels_[id].w;
+	      g+=minor*pixels_[id].g;
+	      b+=minor*pixels_[id].b;
+	      summ+=minor;
+	    }
+	}
+      if(summ > 0)
+	{
+      pixels_[poi].r = (uint8_t)(r/summ);
+      pixels_[poi].g = (uint8_t)(g/summ);
+      pixels_[poi].b = (uint8_t)(b/summ);
+      pixels_[poi].w = whiteness;
+	}
+    }
+  if(frame_id%20 == 0)
+    {
+      //spike_id = (spike_id+1)%num_spikes;
+  spikes[0] = rand();
+    }
+  spike_pos -= 11*(num_spikes-1);
+  if(spike_pos < 0)
+    {
+      spike_pos += num_pixels_;
+    }
+  int most = 7;
+  int lesser = 1;
+  int combiner = most + lesser;
+  for(int w =0;w<11;++w)
+    {
+      *(uint32_t *)&pixels_[spike_pos] = spikes[0];
+      pixels_[spike_pos].w = whiteness;
+  spike_pos = (spike_pos +11)%num_pixels_;
+    }
+  }
+  frame_id = (frame_id +1)%12000;
   position_ += 77 + offset_;
   position_ %= num_pixels_;
 }

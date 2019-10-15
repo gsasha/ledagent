@@ -52,6 +52,21 @@ private:
   int position_ = 0;
 };
 
+class SpikeEffect : public Effect {
+public:
+  SpikeEffect(buffer_pixel_t* pixels, int num_pixels);
+
+  void RenderFrame() override;
+private:
+  const int offset_;
+  int position_ = 0;
+  int spike_pos = 0;
+  int spikes[1];
+  int num_spikes = 1;
+  int spike_id = 0;
+  int frame_id = 0;
+};
+
 class ColorFadeEffect : public Effect {
 public:
   ColorFadeEffect(buffer_pixel_t *pixels, int num_pixels, float offset,

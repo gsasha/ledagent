@@ -19,7 +19,7 @@ layout:
       pixel_height: 1
    
     - name: "Neo 0"
-      pattern: horizontal_zigzag
+      pattern: horizontal_rectangle
       strip: 0
       strip_offset: 0
       rows: 15

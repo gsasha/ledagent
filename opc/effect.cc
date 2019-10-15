@@ -92,8 +92,8 @@ void WalkEffect::RenderFrame() {
   position_ %= num_pixels_;
 }
 
-SpikeEffect::SpikeEffect(buffer_pixel_t *pixels, int num_pixels, int offset)
-    : Effect(pixels, num_pixels), offset_(offset), position_(offset) {
+SpikeEffect::SpikeEffect(buffer_pixel_t *pixels, int num_pixels)
+    : Effect(pixels, num_pixels), offset_(0), position_(0) {
 srand (time(NULL));
  memset(pixels_, 0, num_pixels_ * sizeof(buffer_pixel_t));
 }
@@ -101,9 +101,9 @@ srand (time(NULL));
 void SpikeEffect::RenderFrame() {
   
   
-  int arr[8] = {-1,0,1,-1,1,-1,0,1};
-  int carr[8] = {1,1,1,0,0,-1,-1,-1};
-  int maj = 14;
+  int rowoffset[8] = {-1,0,1,-1,1,-1,0,1};
+  int columnoffset[8] = {1,1,1,0,0,-1,-1,-1};
+  int major = 14;
   int minor = 2;
   uint8_t whiteness = 0xff;
   // if((frame_id+1)%3 == 0)
@@ -111,11 +111,11 @@ void SpikeEffect::RenderFrame() {
   for(int i=0;i<15;++i)
   for(int j=0;j<15;++j)
     {
-      int summ = maj;
+      int summ = major;
       int poi = i*15 + j;
-      uint32_t r = maj*pixels_[poi].r;
-      uint32_t g = maj*pixels_[poi].g;
-      uint32_t b = maj*pixels_[poi].b;
+      uint32_t r = major*pixels_[poi].r;
+      uint32_t g = major*pixels_[poi].g;
+      uint32_t b = major*pixels_[poi].b;
       //uint32_t w = maj*pixels_[poi].w;
       if(r==0&&g==0&&b==0)
 	{
@@ -123,8 +123,8 @@ void SpikeEffect::RenderFrame() {
 	}
       for(int k=0;k<8;++k)
 	{
-	  int id = poi+arr[k]+15*carr[k];
-	  if ( id > 0 && id < num_pixels_ && i + carr[k] >= 0 && i + carr[k] < 15 && j + arr[k] >= 0 && j + arr[k] < 15 && pixels_[id].w != 0 )
+	  int id = poi+rowoffset[k]+15*columnoffset[k];
+	  if ( id > 0 && id < num_pixels_ && i + columnoffset[k] >= 0 && i + columnoffset[k] < 15 && j + rowoffset[k] >= 0 && j + rowoffset[k] < 15 && pixels_[id].w != 0 )
 	    {
 	      r+=minor*pixels_[id].r;
 	      //w+=minor*pixels_[id].w;
@@ -151,9 +151,6 @@ void SpikeEffect::RenderFrame() {
     {
       spike_pos += num_pixels_;
     }
-  int most = 7;
-  int lesser = 1;
-  int combiner = most + lesser;
   for(int w =0;w<11;++w)
     {
       *(uint32_t *)&pixels_[spike_pos] = spikes[0];
@@ -162,8 +159,6 @@ void SpikeEffect::RenderFrame() {
     }
   }
   frame_id = (frame_id +1)%12000;
-  position_ += 77 + offset_;
-  position_ %= num_pixels_;
 }
 
 void HSV_to_RGB(float h, float s, float v, float *r, float *g, float *b) {

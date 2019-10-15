@@ -108,7 +108,7 @@ void Animation::SetDefaultScenario() {
 
     if (i < 2) {
       strips_[i].effect =
-	hack::make_unique<SpikeEffect>(pixels, num_pixels,0);
+	hack::make_unique<SpikeEffect>(pixels, num_pixels);
     } else if (i < 24) {
       strips_[i].effect =
           hack::make_unique<StarsEffect>(pixels, num_pixels, i * 5 + 15);

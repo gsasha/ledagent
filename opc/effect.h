@@ -54,7 +54,7 @@ private:
 
 class SpikeEffect : public Effect {
 public:
-  SpikeEffect(buffer_pixel_t* pixels, int num_pixels, int offset);
+  SpikeEffect(buffer_pixel_t* pixels, int num_pixels);
 
   void RenderFrame() override;
 private:

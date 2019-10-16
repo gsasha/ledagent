@@ -111,6 +111,8 @@ static struct option long_options[] = {
 
     {"config", required_argument, NULL, 'C'},
 
+    {"strip-config", required_argument, NULL, 'N'},
+
     {NULL, 0, NULL, 0}};
 
 void set_pru_mode_and_mapping_from_legacy_output_mode_name(
@@ -164,7 +166,7 @@ void print_usage(char **argv) {
 }
 
 void handle_args(int argc, char **argv, server_config_t *server_config,
-                 std::string *config_file) {
+                 std::string *config_file, std::string* strip_config_file) {
   extern char *optarg;
 
   int opt;
@@ -254,6 +256,10 @@ void handle_args(int argc, char **argv, server_config_t *server_config,
       } else {
         fprintf(stderr, "Config file not loaded: %s\n", opc_server_get_error().c_str());
       }
+    } break;
+
+    case 'N': {
+      *strip_config_file = optarg;
     } break;
 
     case 'h': {
@@ -397,7 +403,6 @@ int main(int argc, char **argv) {
 /*
   absl::ParseCommandLine(argc, argv);
 */
-  YAML::Node config;
 /*
   if (!absl::GetFlag(FLAGS_config).empty()) {
     config = YAML::Load(absl::GetFlag(FLAGS_config));
@@ -412,9 +417,17 @@ int main(int argc, char **argv) {
   init_server_config(&server_config);
 
   std::string config_file;
-  handle_args(argc, argv, &server_config, &config_file);
+  std::string driver_config_file;
+  handle_args(argc, argv, &server_config, &config_file, &driver_config_file);
   print_server_config(stderr, &server_config);
   validate_server_config_or_die(&server_config);
+
+  if (strip_config_file.empty()) {
+    std::cerr << "strip config file yaml is required\n";
+    return 1;
+  }
+  YAML::Node config;
+  config = YAML::LoadFile(driver_config_file);
 
   // Save the config file if specified
   // TODO(gsasha): it looks that if config name is given, it is read and

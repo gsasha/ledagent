@@ -6,7 +6,8 @@
 
 class LedscapeDriver : public Driver {
 public:
-  LedscapeDriver(const server_config_t &server_config);
+  LedscapeDriver(const server_config_t &server_config,
+                 const YAML::Node &driver_config);
 
   virtual void SetPixelData(buffer_pixel_t *pixels, int num_pixels) override;
 

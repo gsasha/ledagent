@@ -1,4 +1,6 @@
 driver:
+  num_strips: 48
+  pixels_per_strip: 256
   default_strip:
     mode: "rgb"
   strips:

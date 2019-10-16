@@ -6,7 +6,8 @@
 #include "opc/color.h"
 #include "opc/server-pru.h"
 
-LedscapeDriver::LedscapeDriver(const server_config_t &server_config)
+LedscapeDriver::LedscapeDriver(const server_config_t &server_config,
+                               const YAML::Node &driver_config)
     : Driver(server_config.used_strip_count, server_config.leds_per_strip),
       server_config_(server_config), lut_enabled_(server_config.lut_enabled) {
   Init();

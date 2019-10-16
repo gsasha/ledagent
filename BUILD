@@ -62,7 +62,7 @@ pkg_tar(
     srcs = [
         ":opc-server",
         ":pru_bin",
-    ],
+    ] + glob(["devicetree/*"]),
     files = {
         "//opc:emulator-layout-rectangle.yaml": "opc/emulator-layout-rectangle.yaml",
         "//opc:emulator-layout-screens.yaml": "opc/emulator-layout-screens.yaml",

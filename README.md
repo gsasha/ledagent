@@ -16,6 +16,10 @@ This version of the library was forked from his original WS2811 work. Various im
 attempt to make an accessible and powerful LED driver based on the BBB. Many thanks to Trammell for his excellent work
 in scaffolding the BBB and PRUs for driving LEDs.
 
+Gsasha notes
+=====================================
+https://elinux.org/EBC_Exercise_30_PRU_via_remoteproc_and_RPMsg
+
 
 Installation
 =====================================

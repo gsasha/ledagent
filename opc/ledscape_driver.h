@@ -3,6 +3,7 @@
 
 #include "opc/driver.h"
 #include "opc/server-config.h"
+#include "yaml-cpp/yaml.h"
 
 class LedscapeDriver : public Driver {
 public:

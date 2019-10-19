@@ -1,4 +1,5 @@
 load("//tools/workspace/abseil:repository.bzl", "abseil_repository")
+load("//tools/workspace/googletest:repository.bzl", "googletest_repository")
 load("//tools/workspace/frozen:repository.bzl", "cesanta_frozen_repository")
 load("//tools/workspace/mongoose:repository.bzl", "cesanta_mongoose_repository")
 load("//tools/workspace/rpi_bazel:repository.bzl", "rpi_bazel_repository")
@@ -12,6 +13,8 @@ def add_default_repositories(excludes = []):
     #    bazel_deps_repository(name="bazel_deps")
     if "abseil" not in excludes:
         abseil_repository(name = "com_google_absl")
+    if "googletest" not in excludes:
+        googletest_repository(name = "googletest")
     if "cesanta_frozen" not in excludes:
         cesanta_frozen_repository(name = "cesanta_frozen")
     if "cesanta_mongoose" not in excludes:
